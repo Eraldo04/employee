@@ -21,7 +21,7 @@
         <td>{{ employees.zipcode}}</td>
         <td>
              <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="onCompleteEmployee(employees.id)">Edit</button>
-             <button type="button" class="btn btn-danger ml-2" (click)="onDeleteEmployee(employees.index)">Delete</button>
+             <button type="button" class="btn btn-danger ml-2" (click)="onDeleteEmployee(employees.id)">Delete</button>
         </td>
       </tr>
     </tbody>
