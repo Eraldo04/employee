@@ -1,0 +1,32 @@
+ <div class="container">
+    <div class="row">
+
+        <form ngForm #employeeForm="ngForm" (ngSubmit)="onEmployeeCreate(employeeForm.value)">
+            <div class="modal-body">
+                <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">Name</label>
+                <div class="input-group mb-3">
+                    <input name="name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+            </div>
+            <label for="basic-url" class="mr-2 fw-bold text-primary text-center">Username</label>
+            <div class="input-group mb-3">
+                <input name="username" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+            </div>
+            <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">Street</label>
+            <div class="input-group mb-3">
+                <input name="street" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+            </div>
+            <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">Suite</label>
+            <div class="input-group mb-3">
+                <input name="suite" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+            </div>
+            <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">ZipCode</label>
+            <div class="input-group mb-3">
+                <input name="zipcode" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add Employee</button>
+        </div>
+    </form>
+  </div>
+</div>

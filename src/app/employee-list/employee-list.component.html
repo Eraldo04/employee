@@ -1,0 +1,67 @@
+
+<table class="table">
+  <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Street</th>
+        <th scope="col">Suite</th>
+        <th scope="col">ZipCode</th>
+        <th scope="col">Buttons</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider" *ngFor="let employees of employeeList">
+      <tr>
+        <th scope="row">{{ employees.id }}</th>
+        <td>{{ employees.name }}</td>
+        <td>{{ employees.username}}</td>
+        <td>{{ employees.street}}</td>
+        <td>{{ employees.suite}}</td>
+        <td>{{ employees.zipcode}}</td>
+        <td>
+             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="onCompleteEmployee(employees.id)">Edit</button>
+             <button type="button" class="btn btn-danger ml-2" (click)="onDeleteEmployee(employees.index)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- MODAL EDIT FORM BOOTSTRAP -->
+
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form ngForm #employeeEditForm="ngForm" (ngSubmit)="onEditEmployee(employeeEditForm.value)">
+          <div class="modal-body">
+              <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">Name</label>
+              <div class="input-group mb-3">
+                  <input name="name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+          </div>
+          <label for="basic-url" class="mr-2 fw-bold text-primary text-center">Username</label>
+          <div class="input-group mb-3">
+              <input name="username" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+          </div>
+          <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">Street</label>
+          <div class="input-group mb-3">
+              <input name="street" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+          </div>
+          <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">Suite</label>
+          <div class="input-group mb-3">
+              <input name="suite" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+          </div>
+          <label class="mr-2 fw-bold text-primary" id="inputGroup-sizing-default">ZipCode</label>
+          <div class="input-group mb-3">
+              <input name="zipcode" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ngModel>
+          </div>
+      </div>
+      <div class="modal-footer" >
+          <button type="submit" class="btn btn-info">Edit Employee</button>
+      </div>
+  </form>
+      </div>
+    </div>
+  </div>
+  <!-- (click)="onEditEmployees(employees.id)" -->
+    
