@@ -1,79 +1,88 @@
 import { Component, ViewChild } from '@angular/core';
 import { ApiServiceService } from '../api-service.service';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+
+import { Route, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
-  styleUrls: ['./employee-list.component.css']
+  styleUrls: ['./employee-list.component.css'],
 })
 export class EmployeeListComponent {
   listEmployees!: any[];
-  employeeList:any = [];
+  // form!: FormGroup;
+
+  employeeList: any = [];
   editMode: boolean = false;
+  id!: string;
   @ViewChild('employeeEditForm') form: NgForm | undefined;
 
-  constructor(private apicalservice: ApiServiceService) {
-
-  }    
+  constructor(
+    private apicalservice: ApiServiceService,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.fetchEmployee();
   }
 
-  fetchEmployee(){
-    return this.apicalservice.getEmployee().subscribe((data) => {
-       this.listEmployees = data;
-       console.log('list of employees', this.listEmployees);
-       
-        for (let employee of this.employeeList) {
-        const objAddress = JSON.stringify(this.employeeList)
-         this.employeeList.push({
-           id: employee.id,
-           name: employee.name,
-           username: employee.username,
-          //  street: objAddress.address["street"],
-           suite: employee.address["suite"],
-          zipcode: employee.address["zipcode"],
-        })
-       }
-  });
-}
+  fetchEmployee() {
+    this.apicalservice.getEmployee().subscribe((data: any) => {
+      this.listEmployees = data;
+      console.log('Data requested ...');
+      console.log(this.listEmployees);
 
-onCompleteEmployee(id: string){
-  // Get the list of employee by id
-  let currentEmployee = this.employeeList.find((e: { id: string; }) => {return e.id === id});
-  console.log(currentEmployee);
+      //Populate the employee list from array with objects
+      for (let i = 0; i < this.listEmployees.length; i++) {
+        this.employeeList.push({
+          id: this.listEmployees[i].id,
+          name: this.listEmployees[i].name,
+          username: this.listEmployees[i].username,
+          street: this.listEmployees[i].address.street,
+          suite: this.listEmployees[i].address.suite,
+          zipcode: this.listEmployees[i].address.zipcode,
+        });
+      }
+    });
+  }
 
-  //Populate the form with the specified employee
-  this.form?.setValue({
-    name: currentEmployee.name ?? null,
-    username: currentEmployee.username ?? null,
-    street: currentEmployee.street ?? null,
-    suite: currentEmployee.suite ?? null,
-    zipcode: currentEmployee.zipcode ?? null, 
-  });
-
-  //Change the employee by the button name
-
-}
-
-onEditEmployee(id: string){
-  let currentEmployee = this.employeeList.find((e: { id: string; }) => {return e.id === id});
-
-  return this.apicalservice.updateEmployee(id, currentEmployee).subscribe((data: any) => {
-    console.log("updated employee: " + JSON.stringify(currentEmployee));
-  })
-}
-
-onDeleteEmployee(id: string){ {
-  let currentEmployee = this.employeeList.find((e: { id: string; }) => {return e.id === id});
-  return this.apicalservice.deleteEmployee(id).subscribe((data: any) => {
-    console.log("Delete employee successfully");
+  onCompleteEmployee(id: string) {
+    let currentEmployee = this.employeeList.find((e: { id: string }) => {
+      return e.id === id;
+    });
     console.log(currentEmployee);
 
-  })
-}
+    this.form?.setValue({
+      name: currentEmployee.name ?? null,
+      username: currentEmployee.username ?? null,
+      street: currentEmployee.street ?? null,
+      suite: currentEmployee.suite ?? null,
+      zipcode: currentEmployee.zipcode ?? null,
+    });
+  }
 
-}
+  onEditEmployee(id: string) {
+    this.apicalservice.updateEmployee(this.id, this.form?.value).pipe(first()).subscribe((data: any) => {
+      console.log(data);
+      this.reloadRoute();
+    }
+    );
+  }
+
+  onDeleteEmployee(id: string) {
+    this.apicalservice.deleteEmployee(id).subscribe((data: any) => {
+      console.log(data);
+      this.reloadRoute();
+    });
+  }
+
+  reloadRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
+  }
 }
